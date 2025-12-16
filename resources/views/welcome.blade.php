@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MusicChart - Trending Music & Popular Albums</title>
 
-    <!-- Tailwind & Fonts -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* Color variables */
         :root {
             --primary-blue: #1e40af;
             --primary-purple: #7c3aed;
@@ -18,6 +23,7 @@
             --accent-orange: #f59e0b;
         }
 
+        /* Base styles */
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #000000 100%);
@@ -26,6 +32,7 @@
             min-height: 100vh;
         }
 
+        /* Glass card effect */
         .glass-card {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
@@ -42,6 +49,7 @@
                 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
 
+        /* Rank badge styling */
         .rank-badge {
             position: absolute;
             top: -12px;
@@ -64,6 +72,7 @@
             transform: scale(1.1);
         }
 
+        /* Gradient text effect */
         .gradient-text {
             background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
             -webkit-background-clip: text;
@@ -71,6 +80,7 @@
             background-clip: text;
         }
 
+        /* Pulsing glow animation */
         .pulse-glow {
             animation: pulse-glow 2s ease-in-out infinite alternate;
         }
@@ -84,12 +94,14 @@
             }
         }
 
+        /* Navigation blur effect */
         .nav-blur {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        /* Album cover styling */
         .album-cover {
             position: relative;
             overflow: hidden;
@@ -113,6 +125,7 @@
             opacity: 1;
         }
 
+        /* Primary button styling */
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
             border: none;
@@ -128,6 +141,7 @@
             box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
         }
 
+        /* Popularity bar styling */
         .popularity-bar {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -142,6 +156,7 @@
             transition: width 1s ease-in-out;
         }
 
+        /* Stat card styling */
         .stat-card {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -155,6 +170,7 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         }
 
+        /* Floating element animation */
         .floating-element {
             animation: float 6s ease-in-out infinite;
         }
@@ -167,8 +183,7 @@
 </head>
 
 <body class="min-h-screen antialiased">
-
-    <!-- Navigation -->
+    <!-- Navigation Section -->
     <nav class="nav-blur sticky top-0 z-50 py-4 px-6">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -188,7 +203,7 @@
     <!-- Hero Section -->
     <section class="relative overflow-hidden py-20 px-6">
         <div class="max-w-6xl mx-auto text-center relative z-10">
-            <!-- Floating Elements -->
+            <!-- Floating decorative elements -->
             <div class="floating-element absolute -top-10 -left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"></div>
             <div class="floating-element absolute -bottom-10 -right-10 w-24 h-24 bg-purple-500/10 rounded-full blur-xl" style="animation-delay: 2s;"></div>
 
@@ -221,7 +236,7 @@
         </div>
     </section>
 
-    <!-- Top Albums Chart -->
+    <!-- Top Albums Chart Section -->
     <section class="py-16 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -236,16 +251,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 @foreach($topAlbums as $index => $album)
                 <div class="glass-card rounded-2xl p-6 relative group">
-                    <!-- Rank Badge -->
-                    <div class="rank-badge
-                        @if($index == 0) bg-gradient-to-br from-yellow-400 to-yellow-600
-                        @elseif($index == 1) bg-gradient-to-br from-gray-400 to-gray-600
-                        @elseif($index == 2) bg-gradient-to-br from-orange-400 to-orange-600
-                        @else bg-gradient-to-br from-blue-500 to-blue-700 @endif">
+                    <!-- Rank badge with different colors for top 3 positions -->
+                    @php
+                        $rankColor = match($index) {
+                            0 => 'bg-gradient-to-br from-yellow-400 to-yellow-600',  // Gold for 1st
+                            1 => 'bg-gradient-to-br from-gray-400 to-gray-600',     // Silver for 2nd
+                            2 => 'bg-gradient-to-br from-orange-400 to-orange-600', // Bronze for 3rd
+                            default => 'bg-gradient-to-br from-blue-500 to-blue-700' // Blue for others
+                        };
+                    @endphp
+
+                    <div class="rank-badge {{ $rankColor }}">
                         #{{ $index + 1 }}
                     </div>
 
-                    <!-- Album Cover -->
+                    <!-- Album cover with fallback if no image -->
                     <div class="album-cover mb-6">
                         @if($album->cover)
                             <img src="{{ asset('storage/' . $album->cover) }}"
@@ -258,7 +278,7 @@
                         @endif
                     </div>
 
-                    <!-- Album Info -->
+                    <!-- Album information -->
                     <div class="space-y-4">
                         <div>
                             <h3 class="font-bold text-xl mb-2 line-clamp-1 group-hover:text-blue-300 transition-colors">
@@ -269,7 +289,7 @@
                             </p>
                         </div>
 
-                        <!-- Popularity Score -->
+                        <!-- Popularity score section -->
                         <div class="space-y-3">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-400 font-medium">Popularity</span>
@@ -280,13 +300,13 @@
                                 </div>
                             </div>
 
-                            <!-- Progress Bar -->
+                            <!-- Progress bar visualization -->
                             <div class="popularity-bar">
                                 <div class="popularity-fill" style="width: {{ $album->popularity ?? 0 }}%"></div>
                             </div>
                         </div>
 
-                        <!-- Album Stats -->
+                        <!-- Album statistics -->
                         <div class="flex justify-between items-center pt-3 border-t border-gray-700">
                             <div class="flex items-center space-x-2 text-gray-400">
                                 <i class="fas fa-music text-xs"></i>
@@ -295,7 +315,11 @@
                             <div class="flex items-center space-x-2 text-gray-400">
                                 <i class="fas fa-calendar text-xs"></i>
                                 <span class="text-sm font-medium">
-                                    {{ $album->tanggal_rilis ? \Carbon\Carbon::parse($album->tanggal_rilis)->format('M Y') : 'TBA' }}
+                                    @if($album->tanggal_rilis)
+                                        {{ \Carbon\Carbon::parse($album->tanggal_rilis)->format('M Y') }}
+                                    @else
+                                        TBA
+                                    @endif
                                 </span>
                             </div>
                         </div>
@@ -304,7 +328,7 @@
                 @endforeach
             </div>
 
-            <!-- Empty State -->
+            <!-- Empty state when no albums are available -->
             @if($topAlbums->count() == 0)
             <div class="text-center py-20">
                 <div class="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -319,10 +343,11 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
+    <!-- Statistics Section -->
     <section class="py-16 px-6">
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Featured albums count -->
                 <div class="stat-card p-8 text-center">
                     <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-compact-disc text-2xl text-blue-400"></i>
@@ -331,6 +356,7 @@
                     <p class="text-gray-400 font-semibold">Featured Albums</p>
                 </div>
 
+                <!-- Total songs count -->
                 <div class="stat-card p-8 text-center">
                     <div class="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-music text-2xl text-green-400"></i>
@@ -339,6 +365,7 @@
                     <p class="text-gray-400 font-semibold">Total Tracks</p>
                 </div>
 
+                <!-- Total artists count -->
                 <div class="stat-card p-8 text-center">
                     <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-users text-2xl text-purple-400"></i>
@@ -350,7 +377,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer Section -->
     <footer class="border-t border-gray-800 py-12 px-6">
         <div class="max-w-6xl mx-auto text-center">
             <div class="flex justify-center items-center space-x-3 mb-6">
@@ -365,26 +392,69 @@
             </p>
 
             <div class="flex justify-center items-center space-x-6 text-gray-500 text-sm mb-6">
-                <span>© 2024 MusicChart</span>
+                <span>© {{ date('Y') }} MusicChart</span>
                 <span>•</span>
                 <span>All rights reserved</span>
                 <span>•</span>
                 <span>Powered by Fans</span>
             </div>
 
+            <!-- Social media links -->
             <div class="flex justify-center space-x-4">
-                <a href="#" class="text-gray-500 hover:text-white transition-colors">
+                <a href="#" class="text-gray-500 hover:text-white transition-colors" aria-label="Twitter">
                     <i class="fab fa-twitter"></i>
                 </a>
-                <a href="https://instagram.com/syafaalgiffari" class="text-gray-500 hover:text-white transition-colors">
+                <a href="https://instagram.com/syafaalgiffari" class="text-gray-500 hover:text-white transition-colors" aria-label="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="#" class="text-gray-500 hover:text-white transition-colors">
+                <a href="#" class="text-gray-500 hover:text-white transition-colors" aria-label="Spotify">
                     <i class="fab fa-spotify"></i>
                 </a>
             </div>
         </div>
     </footer>
 
+    <!-- JavaScript for interactive elements -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate popularity bars on page load
+            const popularityBars = document.querySelectorAll('.popularity-fill');
+
+            popularityBars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0%';
+
+                // Animate to target width after a short delay
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 300);
+            });
+
+            // Add smooth hover effects to glass cards
+            const glassCards = document.querySelectorAll('.glass-card');
+
+            glassCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-8px)';
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add click effect to rank badges
+            const rankBadges = document.querySelectorAll('.rank-badge');
+
+            rankBadges.forEach(badge => {
+                badge.addEventListener('click', () => {
+                    badge.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        badge.style.transform = 'scale(1.1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -186,6 +186,12 @@
                         <span>Dashboard</span>
                     </a>
 
+                    <a href="{{ route('admin.users.index') }}"
+                       class="nav-link flex items-center space-x-2">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+
                     <a href="{{ route('artists.index') }}"
                        class="nav-link flex items-center space-x-2">
                         <i class="fas fa-user-alt"></i>
@@ -307,6 +313,23 @@
                 <i class="fas fa-bolt text-yellow-400 mr-3"></i>
                 Quick Actions
             </h2>
+
+            <div class="grid grid-cols-1 md:grid-cold-3 gap-6">
+                <!-- Manage Users -->
+                <a href="{{ route('admin.users.index') }}"
+                class="quick-action-card glass-card p-6 text-center border border-white/10 rounded-xl transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500/30 transition-colors">
+                        <i class="fas fa-users text-red-400 text-2xl group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-2">Manage Users</h3>
+                    <p class="text-gray-400 text-sm">Topup points and manage user accounts</p>
+                    <div class="mt-4 flex justify-center">
+                        <span class="text-red-400 text-sm font-semibold flex items-center">
+                            Manage Users <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Manage Artists -->

@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
 
         // Admin User
         DB::table('users')->insert([
+            'name' => 'Administrator',
             'username' => 'admin',
             'email' => 'admin@musicchart.com',
             'password' => Hash::make('admin123'),
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
 
         // Regular Users
         DB::table('users')->insert([
+            'name' => 'John Doe',
             'username' => 'john_doe',
             'email' => 'john@example.com',
             'password' => Hash::make('user123'),
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
+            'name' => 'Sarah Music',
             'username' => 'sarah_music',
             'email' => 'sarah@example.com',
             'password' => Hash::make('user123'),

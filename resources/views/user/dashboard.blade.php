@@ -260,6 +260,15 @@
             </p>
         </div>
 
+        <!-- DEBUG SECTION (temporary) -->
+<div class="fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-lg z-50 text-xs">
+    Top Albums Count: {{ $topAlbums->count() }}<br>
+    Total Songs: {{ $totalSongs }}<br>
+    Total Artists: {{ $totalArtists }}<br>
+    Top Artists Count: {{ $topArtists->count() }}<br>
+    User: {{ $user->name ?? 'No user' }}
+</div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @foreach($topAlbums as $index => $album)
             <div class="glass-card rounded-2xl p-6 relative group">

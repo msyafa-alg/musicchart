@@ -11,27 +11,29 @@ use Illuminate\Support\Facades\DB;
 
 class DonationController extends Controller
 {
+    // Donasi ke artist
     public function store(Request $request, Artist $artist)
     {
         $request->validate([
-            'amount' => 'required|integer|min:1',
+            'amount' => 'required|integer|min:1'
         ]);
 
         $user = Auth::user();
         $amount = $request->amount;
 
+        // Cek poin user
         if ($user->points < $amount) {
-            return back()->with('error', 'Poin tidak cukup untuk donasi.');
+            return back()->with('error', 'Poin tidak mencukupi!');
         }
 
         DB::transaction(function () use ($user, $artist, $amount) {
-            // Kurangi poin user
+            // 1. Kurangi poin user
             $user->decrement('points', $amount);
 
-            // Tambah total donasi artis
-            $artist->increment('total_donations', $amount);
+            // 2. Hitung total donasi secara dinamis (tidak simpan di artist)
+            // Simpan ke tabel donations saja
 
-            // Simpan record donasi
+            // 3. Simpan record donasi
             Donation::create([
                 'user_id' => $user->id,
                 'artist_id' => $artist->id,
@@ -39,53 +41,46 @@ class DonationController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Donasi berhasil! Terima kasih atas dukungan Anda.');
+        return back()->with('success', '🎉 Donasi berhasil! Terima kasih atas dukungan Anda.');
     }
 
-    public function topup(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required|integer|min:1|max:10000',
-        ]);
-
-        $user = Auth::user();
-        $amount = $request->amount;
-
-        // Tambah poin ke user (simulasi top-up)
-        $user->increment('points', $amount);
-
-        return back()->with('success', "Top-up berhasil! {$amount} poin telah ditambahkan ke akun Anda.");
-    }
-
+    // Donasi ke album
     public function donateToAlbum(Request $request, Album $album)
     {
         $request->validate([
-            'amount' => 'required|integer|min:1',
+            'amount' => 'required|integer|min:1'
         ]);
 
         $user = Auth::user();
         $amount = $request->amount;
 
         if ($user->points < $amount) {
-            return back()->with('error', 'Poin tidak cukup untuk donasi.');
+            return back()->with('error', 'Poin tidak mencukupi!');
         }
 
         DB::transaction(function () use ($user, $album, $amount) {
-            // Kurangi poin user
             $user->decrement('points', $amount);
 
-            // Tambah total donasi album
-            $album->increment('total_donations', $amount);
-
-            // Simpan record donasi
             Donation::create([
                 'user_id' => $user->id,
                 'album_id' => $album->id,
                 'amount' => $amount,
-                'type' => 'album',
             ]);
         });
 
-        return back()->with('success', 'Donasi ke album berhasil! Terima kasih atas dukungan Anda.');
+        return back()->with('success', '🎵 Donasi ke album berhasil!');
+    }
+
+    // Top up poin
+    public function topup(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|integer|min:100|max:1000000'
+        ]);
+
+        $user = Auth::user();
+        $user->increment('points', $request->amount);
+
+        return back()->with('success', '💰 Top up ' . number_format($request->amount) . ' poin berhasil!');
     }
 }

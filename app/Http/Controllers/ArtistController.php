@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ArtistsExport;
+use Illuminate\Support\Str;
 
 class ArtistController extends Controller
 {
@@ -40,15 +41,15 @@ class ArtistController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('artists', 'public');
-        }
+
+        $img = $request->file('photo');
+        $nameImg =  Str::random(5). '-Artist.' . $img->getClientOriginalExtension();
+        $path = $img->storeAs('artists', $nameImg, 'public');
 
         Artist::create([
             'name' => $request->name,
             'bio' => $request->bio,
-            'photo' => $photoPath,
+            'photo' => $path,
         ]);
 
         return redirect()->route('artists.index')->with('success', 'Artist berhasil ditambahkan!');
@@ -88,7 +89,7 @@ class ArtistController extends Controller
             }
 
             $file = $request->file('photo');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $filename = Str::random(5). '-Artist.' . $file->getClientOriginalExtension();
             $photoPath = $file->storeAs('artists', $filename, 'public');
         }
 

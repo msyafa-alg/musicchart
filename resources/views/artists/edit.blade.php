@@ -198,7 +198,7 @@
         <!-- Form -->
         <!-- Form -->
 <div class="glass-card rounded-2xl p-8">
-    <form action="{{ route('artists.update', $artist) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('artists.update', $artist->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -249,14 +249,14 @@
             </label>
             <div class="file-input p-6 text-center cursor-pointer">
                 <input type="file" name="photo" id="photo" accept="image/*"
-                       class="hidden">
-                <div class="flex flex-col items-center space-y-3">
+                       class="">
+                {{-- <div class="flex flex-col items-center space-y-3">
                     <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
                     <div>
                         <p class="text-white font-medium">Click to {{ $artist->photo ? 'change' : 'upload' }} photo</p>
                         <p class="form-help">Max file size: 2MB. Supported formats: JPEG, PNG, JPG, GIF</p>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -277,25 +277,25 @@
 </div>
 
 <script>
-    // File input preview untuk edit form
-    const fileInput = document.getElementById('photo');
-    const fileInputContainer = fileInput.parentElement;
-
     fileInput.addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            const fileName = this.files[0].name;
-            fileInputContainer.innerHTML = `
-                <div class="flex flex-col items-center space-y-2">
-                    <i class="fas fa-check-circle text-green-400 text-2xl"></i>
-                    <p class="text-white font-medium">${fileName}</p>
-                    <p class="form-help">Photo selected successfully</p>
-                </div>
-            `;
-        }
+    if (this.files && this.files[0]) {
+        const fileName = this.files[0].name;
+
+        // Jangan HAPUS input!!!
+        // Cuma UPDATE teks preview di bawahnya.
+        fileInputContainer.querySelector('.preview-text')?.remove();
+
+        let preview = document.createElement("div");
+        preview.classList.add("preview-text", "text-sm", "text-gray-300", "mt-2");
+        preview.innerHTML = `
+            <div class="flex flex-col items-center space-y-2">
+                <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                <p class="text-white font-medium">${fileName}</p>
+            </div>
+        `;
+
+        fileInputContainer.appendChild(preview);
+    }
     });
 
-    // Add click event to file input container
-    fileInputContainer.addEventListener('click', function() {
-        fileInput.click();
-    });
 </script>

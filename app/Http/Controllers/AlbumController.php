@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Models\Artist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AlbumController extends Controller
 {
@@ -48,10 +49,9 @@ public function store(Request $request)
         'popularity' => 'nullable|integer|min:0|max:100'
     ]);
 
-    $coverPath = null;
-    if ($request->hasFile('cover')) {
-        $coverPath = $request->file('cover')->store('albums', 'public');
-    }
+    $coverImg = $request->file('cover');
+    $imgName =  'Cover-' . Str::random(5). '.' . $coverImg->getClientOriginalExtension();
+    $coverPath = $coverImg->storeAs('albums', $imgName, 'public');
 
     // Simpan data
     Album::create([

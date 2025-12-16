@@ -250,16 +250,17 @@
                     <label for="cover" class="form-label">
                         <i class="fas fa-image text-yellow-400 mr-2"></i>Album Cover
                     </label>
+
                     <div class="file-input p-6 text-center cursor-pointer">
-                        <input type="file" name="cover" id="cover" accept="image/*"
-                               class="hidden">
-                        <div class="flex flex-col items-center space-y-3">
+ <input type="file" name="cover" id="cover" accept="image/*"
+                               class="">
+                        {{-- <div class="flex flex-col items-center space-y-3">
                             <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
                             <div>
                                 <p class="text-white font-medium">Click to upload cover image</p>
                                 <p class="form-help">Max file size: 2MB. Supported formats: JPEG, PNG, JPG, GIF</p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -302,22 +303,22 @@
     </div>
 
     <script>
-        // File input preview
-        const fileInput = document.getElementById('cover');
-        const fileInputContainer = fileInput.parentElement;
+        // // File input preview
+        // const fileInput = document.getElementById('cover');
+        // const fileInputContainer = fileInput.parentElement;
 
-        fileInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                const fileName = this.files[0].name;
-                fileInputContainer.innerHTML = `
-                    <div class="flex flex-col items-center space-y-2">
-                        <i class="fas fa-check-circle text-green-400 text-2xl"></i>
-                        <p class="text-white font-medium">${fileName}</p>
-                        <p class="form-help">File selected successfully</p>
-                    </div>
-                `;
-            }
-        });
+        // fileInput.addEventListener('change', function(e) {
+        //     if (this.files && this.files[0]) {
+        //         const fileName = this.files[0].name;
+        //         fileInputContainer.innerHTML = `
+        //             <div class="flex flex-col items-center space-y-2">
+        //                 <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+        //                 <p class="text-white font-medium">${fileName}</p>
+        //                 <p class="form-help">File selected successfully</p>
+        //             </div>
+        //         `;
+        //     }
+        // });
 
         // Popularity preview
         const popularityInput = document.getElementById('popularity');

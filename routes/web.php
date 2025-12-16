@@ -9,8 +9,11 @@ use App\Http\Controllers\SongController;
 use App\Http\Controllers\DonationController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ArtistsExport;
+use App\Exports\ArtistsPdfExport;
 use App\Exports\AlbumsExport;
+use App\Exports\AlbumsPdfExport;
 use App\Exports\SongsExport;
+use App\Exports\SongsPdfExport;
 use App\Models\Album;
 use App\Models\Song;
 use App\Models\Artist;
@@ -47,6 +50,12 @@ Route::get('/login', function() {
     return view('auth.login');
 })->name('login');
 
+Route::get('/register', function() {
+    return view('auth.register');
+})->name('register');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+
 // Route POST login tetap sama
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -56,6 +65,12 @@ Route::middleware(['admin'])->group(function () {
 
     // Dashboard
     Route::get('/admin/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
+
+     // USER MANAGEMENT - TOPUP POINTS (BARU)
+    Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/admin/users/{user}/edit-points', [\App\Http\Controllers\Admin\UserController::class, 'editPoints'])->name('admin.users.edit-points');
+    Route::post('/admin/users/{user}/update-points', [\App\Http\Controllers\Admin\UserController::class, 'updatePoints'])->name('admin.users.update-points');
+    Route::post('/admin/users/{user}/topup', [\App\Http\Controllers\Admin\UserController::class, 'topup'])->name('admin.users.topup');
 
     // ========== ARTISTS ROUTES ==========
     // Artists Export
@@ -75,6 +90,11 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/albums/export', function () {
         return Excel::download(new AlbumsExport, 'albums-' . date('Y-m-d') . '.xlsx');
     })->name('albums.export');
+
+    // Albums PDF Export
+    Route::get('/albums/export-pdf', function () {
+        return (new AlbumsPdfExport)->export();
+    })->name('albums.export-pdf');
 
     // Albums Trash Management
     Route::get('/albums/trash', [AlbumController::class, 'trash'])->name('albums.trash');

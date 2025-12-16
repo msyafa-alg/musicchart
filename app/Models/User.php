@@ -10,35 +10,49 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
-        'role', // pastikan ada field role
+        'points',
+        'role',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'points' => 'integer',
         ];
     }
 
-    // Tambahkan method isAdmin()
+    /**
+     * Check if user is admin
+     */
     public function isAdmin()
     {
         return $this->role === 'admin';
-    }
-
-    // Relationship dengan albums jika perlu
-    public function albums()
-    {
-        return $this->belongsToMany(Album::class, 'album_user')->withTimestamps();
     }
 }

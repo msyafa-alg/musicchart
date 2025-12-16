@@ -284,14 +284,14 @@
                     </label>
                     <div class="file-input p-6 text-center cursor-pointer">
                         <input type="file" name="cover" id="cover" accept="image/*"
-                               class="hidden">
-                        <div class="flex flex-col items-center space-y-3">
+                               class="">
+                        {{-- <div class="flex flex-col items-center space-y-3">
                             <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
                             <div>
                                 <p class="text-white font-medium">Click to {{ $album->cover ? 'change' : 'upload' }} cover image</p>
                                 <p class="form-help">Max file size: 2MB. Supported formats: JPEG, PNG, JPG, GIF</p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -336,38 +336,28 @@
     </div>
 
     <script>
-        // File input preview
-        const fileInput = document.getElementById('cover');
-        const fileInputContainer = fileInput.parentElement;
+   fileInput.addEventListener('change', function(e) {
+    if (this.files && this.files[0]) {
+        const fileName = this.files[0].name;
 
-        fileInput.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                const fileName = this.files[0].name;
-                fileInputContainer.innerHTML = `
-                    <div class="flex flex-col items-center space-y-2">
-                        <i class="fas fa-check-circle text-green-400 text-2xl"></i>
-                        <p class="text-white font-medium">${fileName}</p>
-                        <p class="form-help">File selected successfully</p>
-                    </div>
-                `;
-            }
-        });
+        // Hapus preview lama kalo ada
+        let oldPreview = fileInputContainer.querySelector('.file-preview');
+        if (oldPreview) oldPreview.remove();
 
-        // Popularity preview
-        const popularityInput = document.getElementById('popularity');
-        const popularityValue = document.getElementById('popularity-value');
-        const popularityPreview = document.getElementById('popularity-preview');
+        // Tambahkan preview BARU tanpa hapus input
+        const preview = document.createElement("div");
+        preview.classList.add("file-preview", "mt-3", "text-center");
+        preview.innerHTML = `
+            <div class="flex flex-col items-center space-y-1">
+                <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+                <p class="text-white font-medium">${fileName}</p>
+            </div>
+        `;
 
-        popularityInput.addEventListener('input', function() {
-            const value = this.value;
-            popularityValue.textContent = value;
-            popularityPreview.style.width = value + '%';
-        });
+        fileInputContainer.appendChild(preview);
+    }
+});
 
-        // Add click event to file input container
-        fileInputContainer.addEventListener('click', function() {
-            fileInput.click();
-        });
     </script>
 </body>
 </html>
